@@ -75,7 +75,7 @@ function changeImg(change){
         }
     }
 
-    newImg.setAttribute('src', 'img/portfolio/' + calcNewImg + '.jpg');
+    newImg.setAttribute('src', 'img/portfolio/liuriver-london-headshot-' + calcNewImg + '.jpg');
     newImg.setAttribute('class', 'popup-img');
     newImg.setAttribute('id', 'current-img');
 
