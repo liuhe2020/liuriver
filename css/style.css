@@ -17,12 +17,10 @@ body{
     margin: 30px;
     min-height: 100vh;
     display: block;
-    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 .section-title{
     padding: 20px 0;
-    -ms-flex: 0 0 100%;
     flex: 0 0 100%;
     max-width: 100%;
 }
@@ -30,14 +28,6 @@ body{
     font-size: 30px;
     font-weight: 400;
     color: #505050;
-}
-.row {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    position: relative;
 }
 .main-content{
     padding-left: 270px;
@@ -55,7 +45,7 @@ body{
     position: relative;
     Left: 15px;
     top: 15px;
-    z-index: 5;
+    z-index: 7;
     filter: opacity(85%);
     display: none;
 }
@@ -68,14 +58,11 @@ body{
     position: fixed;
     right: 15px;
     top: 15px;
-    z-index: 6;
+    z-index: 11;
     display: none;
     background: transparent;
-    -ms-flex-align: center;
     align-items: center;
-    -ms-flex-pack: center;
     justify-content: center;
-    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 .toggler span{
@@ -98,7 +85,6 @@ body{
     background-color: #505050;
 }
 .toggler.open span::before{
-    -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
     top: 0;
 }
@@ -112,7 +98,6 @@ body{
     background-color: #505050;
 }
 .toggler.open span::after{
-    -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     top: 0;
 }
@@ -124,9 +109,8 @@ body{
     height: 100%;
     left: 0;
     top: 0;
-    z-index: 5;
+    z-index: 9;
     padding: 30px;
-    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 .logo img{
@@ -146,7 +130,6 @@ body{
     font-weight: 400;
     text-decoration: none;
     line-height: 50px;
-    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 .nav li a:hover{
@@ -177,12 +160,10 @@ body{
     color: #505050;
     margin: 0 2px;
     text-decoration: none;
-    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 .social a i:hover{
     font-weight: 500;
-    -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
 .copyright{
@@ -194,18 +175,19 @@ body{
 }
 /* Home Section--------------Home Section--------------Home Section--------------Home Section--------------Home Section--------------*/
 .home-content{
-    -ms-flex: 0 0 100%;
+    display: flex;
+    flex-wrap: wrap;
     flex: 0 0 100%;
     max-width: 100%;
 }
 .home-slide{
     position: relative;
-    -ms-flex: 0 0 45%;
     flex: 0 0 45%;
     max-width: 45%;
+    overflow: hidden;
 }
-.home-slide .cf-placeholder img{
-    max-width: 100%;
+.home-slide .placeholder img{
+    width: 100%;
     height: auto;
 }
 .home-intro{
@@ -213,59 +195,179 @@ body{
     color: #787878;
     font-size: 30px;
     font-weight: 300;
-    -ms-flex: 0 0 46%;
     flex: 0 0 46%;
     max-width: 46%;
-}  
-.cf img{
+}
+.slideshow{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.slideshow-image{
     position: absolute;
-    animation-name: crossfade;
+    width: 100%;
+    height: 100%;
+    background: no-repeat 50% 50%;
+    background-size: cover;
+    animation-name: kenburns;
+    animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-duration: 24s;
+    opacity: 1;
+    transform: scale(1.15);
 }
-.cf img:nth-of-type(1){
-    animation-delay: 20s;
+.slideshow-image:nth-child(1){
+    animation-name: kenburns-1;
+    z-index: 6;
 }
-.cf img:nth-of-type(2){
-    animation-delay: 16s;
+.slideshow-image:nth-child(2){
+    animation-name: kenburns-2;
+    z-index: 5;
 }
-.cf img:nth-of-type(3){
-    animation-delay: 12s;
+.slideshow-image:nth-child(3){
+    animation-name: kenburns-3;
+    z-index: 4;
 }
-.cf img:nth-of-type(4){
-    animation-delay: 8s;
+.slideshow-image:nth-child(4){
+    animation-name: kenburns-4;
+    z-index: 3;
 }
-.cf img:nth-of-type(5){
-    animation-delay: 4s;
+.slideshow-image:nth-child(5){
+    animation-name: kenburns-5;
+    z-index: 2;
 }
-.cf img:nth-of-type(6){
-    animation-delay: 0s;
+.slideshow-image:nth-child(6){
+    animation-name: kenburns-6;
+    z-index: 1;
 }
-@keyframes crossfade{
-    0%{
-        opacity: 1;
+@keyframes kenburns-1{  
+    0% {
+    opacity: 1;
+    transform: scale(1.15);
     }
-    12.5%{
-        opacity: 1;
+    1.5625% {
+    opacity: 1;
     }
-    16.67%{
-        opacity: 0;
+    15.1042% {
+    opacity: 1;
     }
-    95.83%{
-        opacity: 0;
+    18.2292% {
+    opacity: 0;
+    transform: scale(1);
     }
-    100%{
-        opacity: 1;
+    100% {
+    opacity: 0;
+    transform: scale(1.15);
+    }
+    98.4375% {
+    opacity: 0;
+    transform: scale(1.16);
+    }
+    100% {
+    opacity: 1;
     }
 }
-.cf img{
-    width: 100%;
-    height: auto;
+@keyframes kenburns-2{  
+    15.1042% {
+    opacity: 1;
+    transform: scale(1.15);
+    }
+    18.2292% {
+    opacity: 1;
+    }
+    31.7708% {
+    opacity: 1;
+    }
+    34.8958% {
+    opacity: 0;
+    transform: scale(1);
+    }
+    100% {
+    opacity: 0;
+    transform: scale(1.15);
+    }
+}
+@keyframes kenburns-3{  
+    31.7708% {
+    opacity: 1;
+    transform: scale(1.15);
+    }
+    34.8958% {
+    opacity: 1;
+    }
+    48.4375% {
+    opacity: 1;
+    }
+    51.5625% {
+    opacity: 0;
+    transform: scale(1);
+    }
+    100% {
+    opacity: 0;
+    transform: scale(1.15);
+    }
+}
+@keyframes kenburns-4{  
+    48.4375% {
+    opacity: 1;
+    transform: scale(1.15);
+    }
+    51.5625% {
+    opacity: 1;
+    }
+    65.1042% {
+    opacity: 1;
+    }
+    68.2292% {
+    opacity: 0;
+    transform: scale(1);
+    }
+    100% {
+    opacity: 0;
+    transform: scale(1.15);
+    }
+}
+@keyframes kenburns-5{  
+    65.1042% {
+    opacity: 1;
+    transform: scale(1.15);
+    }
+    68.2292% {
+    opacity: 1;
+    }
+    81.7708% {
+    opacity: 1;
+    }
+    84.8958% {
+    opacity: 0;
+    transform: scale(1);
+    }
+    100% {
+    opacity: 0;
+    transform: scale(1.15);
+    }
+}
+@keyframes kenburns-6{  
+    81.7708% {
+    opacity: 1;
+    transform: scale(1.15);
+    }
+    84.8958% {
+    opacity: 1;
+    }
+    98.4375% {
+    opacity: 1;
+    }
+    100% {
+    opacity: 0;
+    transform: scale(1);
+    }
 }
 
 /* About Section---------About Section---------About Section---------About Section---------About Section---------About Section--------- */
 .about-content{
-    -ms-flex: 0 0 100%;
+    display: flex;
+    flex-wrap: wrap;
     flex: 0 0 100%;
     max-width: 100%;
 }
@@ -273,7 +375,6 @@ body{
     padding: 10px 30px 0 0;
     color: #787878;
     font-size: 18px;
-    -ms-flex: 0 0 50%;
     flex: 0 0 50%;
     max-width: 50%;
 }
@@ -292,12 +393,12 @@ body{
 
 /* Portfolio Section--------------Portfolio Section--------------Portfolio Section--------------Portfolio Section-------------- */
 .gallery{
-    -ms-flex: 0 0 100%;
+    display: flex;
+    flex-wrap: wrap;
     flex: 0 0 100%;
     max-width: 100%;
 }
 .gallery-cell{
-    -ms-flex: 0 0 25%;
     flex: 0 0 25%;
     max-width: 25%;
     margin: 0;
@@ -326,14 +427,12 @@ body{
     z-index: 20;
     cursor: pointer;
     display: flex;
-    -ms-flex-align: center;
     justify-content: center;
-    -ms-flex-pack: center;
     align-items: center;
 }
 .popup-img{
     max-width: 100vw;
-    max-height: 100vw;
+    max-height: 100vh;
     z-index: 21;
 }
 .fa-chevron-right, .fa-chevron-left{
@@ -347,7 +446,7 @@ body{
     z-index: 22;
     font-size: 2rem;
     padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: #111111;
     color: #dbdbdb;
     cursor: pointer;
@@ -359,7 +458,7 @@ body{
     z-index: 22;
     font-size: 2rem;
     padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: #111111;
     color: #dbdbdb;
     cursor: pointer;
@@ -388,8 +487,8 @@ body{
     width: 100%;
     overflow: hidden;
     border: 1px solid #c8c8c8;
-    margin-bottom: 20px;
-    padding-top: 10px;
+    margin-bottom: 15px;
+    padding-top: 5px;
 }
 .field .fas{
     visibility: hidden;
@@ -402,18 +501,18 @@ body{
     font-weight: 400;
     color: #787878;
     line-height: 1.2;
-    padding: 0 0 5px 15px;
+    padding-left: 15px;
 }
 .input{
     outline: none;
     border: none;
     display: block;
     width: 96%;
-    height: 40px;
+    height: 35px;
     background: transparent;
     font-size: 18px;
     color: #000000d9;
-    padding: 0 15px;
+    padding: 0 0 3px 15px;
 }
 textarea.input{
     min-height: 150px;
@@ -446,12 +545,10 @@ textarea.input{
 .services .container{
     display: flex;
     flex-wrap: wrap;
-    -ms-flex: 0 0 100%;
     flex: 0 0 100%;
     max-width: 100%;
 }
 .card{
-    -ms-flex: 0 0 50%;
     flex: 0 0 50%;
     max-width: 50%;
 }
@@ -560,14 +657,12 @@ textarea.input{
 /* Responsive--------------Responsve--------------Responsive--------------Responsive--------------Responsive-------------- */
 @media (max-width: 1439px){
     .home-slide{
-        -ms-flex: 0 0 60%;
         flex: 0 0 60%;
         max-width: 60%;
     }
     .home-intro{
         font-size: 22px;
         padding: 0 30px 30px 30px;
-        -ms-flex: 0 0 40%;
         flex: 0 0 40%;
         max-width: 40%;
     }
@@ -576,12 +671,10 @@ textarea.input{
 @media (max-width: 1199px){
     .about-intro, .about-img{
         padding: 10px 0 30px 0;
-        -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%;
     }
     .gallery-cell{
-        -ms-flex: 0 0 33%;
         flex: 0 0 33%;
         max-width: 33%;
     }
@@ -594,7 +687,6 @@ textarea.input{
     .home-slide,
     .home-intro,
     .card{
-        -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%;
     }
@@ -602,7 +694,6 @@ textarea.input{
         padding: 20px 0;
     }
     .gallery-cell{
-        -ms-flex: 0 0 50%;
         flex: 0 0 50%;
         max-width: 50%;
     }
@@ -620,7 +711,6 @@ textarea.input{
         margin-left: 20px;
     }
     .toggler{
-        display: -ms-flexbox;
         display: flex;
         right: 15px;
     }
@@ -643,8 +733,7 @@ textarea.input{
         padding: 40px 0 20px 0;
     }
     .home-slide{
-        overflow: hidden;
-        padding-top: 10px;
+        margin-top: 10px;
     }
     .home-intro{
         font-size: 16px;
@@ -652,7 +741,6 @@ textarea.input{
     .home-slide,
     .home-intro,
     .about-intro, .about-img{
-        -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%;
     }
