@@ -119,6 +119,9 @@ body {
   top: 0;
   z-index: 9;
   padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   transition: all 0.3s ease;
 }
 .logo img {
@@ -126,42 +129,34 @@ body {
   filter: opacity(85%);
 }
 .nav {
+  flex: 1;
   margin: 40px;
   list-style-type: none;
 }
 .nav li {
   display: block;
+  transition: all 0.3s ease;
 }
 .nav li a {
   color: var(--text-color);
   font-size: 25px;
-  font-weight: 400;
   text-decoration: none;
   line-height: 50px;
-  transition: all 0.3s ease;
 }
-.nav li a:hover {
-  margin-left: -10px;
-  font-weight: 600;
+.nav li:hover {
+  transform: translateX(-10px);
 }
 .location i {
-  position: absolute;
-  bottom: 106px;
-  left: 82px;
   font-size: 18px;
   color: var(--text-color);
 }
 .location p {
-  position: absolute;
-  bottom: 100px;
-  left: 102px;
+  display: inline-block;
   font-size: 20px;
   color: var(--text-color-light);
 }
 .social {
-  position: absolute;
-  bottom: 50px;
-  left: 100px;
+  margin: 10px 0 10px;
 }
 .social a i {
   font-size: 30px;
@@ -175,11 +170,8 @@ body {
   transform: scale(1.1);
 }
 .copyright {
-  position: absolute;
-  bottom: 30px;
   font-size: 13px;
   color: var(--text-color-light);
-  text-align: center;
 }
 /* Home Section--------------Home Section--------------Home Section--------------Home Section--------------Home Section--------------*/
 .home-content {
@@ -417,6 +409,7 @@ body {
 }
 .gallery-cell img {
   display: block;
+  width: 100%;
   max-width: 100%;
   height: auto;
   transition: 0.4s ease;
@@ -425,7 +418,7 @@ body {
   transform: scale(1.1);
 }
 
-/* Porfolio Section - pop up gallery window--------------------Porfolio Section - pop up gallery window-------------------- */
+/* Porfolio Section - lightbox-------------------------------Porfolio Section - lightbox------------------------------- */
 .img-window {
   width: 100vw;
   height: 100vh;
@@ -685,7 +678,7 @@ textarea.input {
 }
 
 /* Responsive--------------Responsve--------------Responsive--------------Responsive--------------Responsive-------------- */
-@media (max-width: 1439px) {
+@media (max-width: 1440px) {
   .home-slide {
     flex: 0 0 60%;
     max-width: 60%;
@@ -698,7 +691,7 @@ textarea.input {
   }
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1200px) {
   .about-intro,
   .about-img {
     padding: 10px 0 30px 0;
@@ -714,7 +707,7 @@ textarea.input {
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   .home-slide,
   .home-intro,
   .card {
@@ -733,13 +726,13 @@ textarea.input {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .mobile-logo {
     display: inline;
   }
   .logo img {
-    width: 170px;
-    margin-left: 20px;
+    width: 150px;
+    margin-top: 30px;
   }
   .toggler {
     display: flex;
@@ -751,7 +744,7 @@ textarea.input {
   .sidebar.open {
     left: 0px;
     background-color: #ffffff;
-    width: 767px;
+    width: 100vw;
   }
   .main-content {
     padding-left: 0;
