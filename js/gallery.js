@@ -39,7 +39,7 @@ galleryContainer.addEventListener("click", (e) => {
   popUpImage.className = "popup-img";
 });
 
-// Listen to click events on document and utilise event bubbling to select JS injected elements from other functions
+// Listen to click events on document and utilise event bubbling to select JS injected elements
 document.addEventListener("click", (e) => {
   const targetClass = e.target.classList;
 
@@ -58,6 +58,11 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("mousedown", (e) => {
+  if (e.target.classList.contains("zoom")) {
+    dragImage(e);
+  }
+});
+document.addEventListener("touchstart", (e) => {
   if (e.target.classList.contains("zoom")) {
     dragImage(e);
   }
@@ -108,10 +113,14 @@ function dragImage(e) {
   }
 
   document.addEventListener("mousemove", moveImage);
+  document.addEventListener("touchmove", moveImage);
 
   // Remove the mousemove listener to stop image moving with cursor
   imageZoomed.addEventListener("mouseup", () => {
     document.removeEventListener("mousemove", moveImage);
+  });
+  imageZoomed.addEventListener("touchend", () => {
+    document.removeEventListener("touchend", moveImage);
   });
 
   // Disable HTML default dragging effect
