@@ -1,72 +1,171 @@
-// Lightbox
-let galleryImages = document.querySelectorAll(".gallery-cell");
-let getLatestOpenedImg;
-let windowWidth = window.innerWidth;
+"use strict";
 
-galleryImages.forEach(function (image, index) {
-  image.onclick = function () {
-    getLatestOpenedImg = index + 1;
+const galleryImages = document.querySelectorAll(".gallery-cell");
+const galleryContainer = document.querySelector(".gallery");
+const bodyContainer = document.body;
+let imageIndex;
 
-    let container = document.body;
-    let newImgWindow = document.createElement("div");
-    container.appendChild(newImgWindow);
-    newImgWindow.setAttribute("class", "img-window");
-    newImgWindow.setAttribute("onclick", "closeImg()");
+// Create lightbox component and inject it to the body on click event
+galleryContainer.addEventListener("click", (e) => {
+  // Reconstruct array of images based on click event
+  const targetImage = e.target.parentElement;
+  const imageArray = Array.from(targetImage.parentElement.children);
+  // Get index of current pop-up image
+  imageIndex = imageArray.indexOf(targetImage) + 1;
 
-    let newImg = image.firstElementChild.cloneNode();
-    newImgWindow.appendChild(newImg);
-    newImg.classList.remove("gallery-img");
-    newImg.classList.add("popup-img");
-    newImg.setAttribute("id", "current-img");
+  // Create html elements within lightbox component
+  const bgLayer = document.createElement("div");
+  const imageContainer = document.createElement("div");
+  const popUpImage = e.target.cloneNode();
+  const nextBtn = document.createElement("a");
+  const prevBtn = document.createElement("a");
+  const exitBtn = document.createElement("a");
+  const zoomBtn = document.createElement("a");
 
-    newImg.onload = function () {
-      let newNextBtn = document.createElement("a");
-      newNextBtn.innerHTML = '<i class="fas fa-chevron-right next"></i>';
-      container.appendChild(newNextBtn);
-      newNextBtn.setAttribute("class", "img-btn-next");
-      newNextBtn.setAttribute("onclick", "changeImg(1)");
+  bodyContainer.appendChild(bgLayer);
+  imageContainer.appendChild(popUpImage);
+  bgLayer.append(imageContainer, nextBtn, prevBtn, exitBtn, zoomBtn);
 
-      let newPrevBtn = document.createElement("a");
-      newPrevBtn.innerHTML = '<i class="fas fa-chevron-left next"></i>';
-      container.appendChild(newPrevBtn);
-      newPrevBtn.setAttribute("class", "img-btn-prev");
-      newPrevBtn.setAttribute("onclick", "changeImg(0)");
-    };
-  };
+  nextBtn.innerHTML =
+    '<span class="material-icons img-btn-next">chevron_right</span>';
+  prevBtn.innerHTML =
+    '<span class="material-icons img-btn-prev">chevron_left</span>';
+  exitBtn.innerHTML = '<span class="material-icons img-btn-exit">close</span>';
+  zoomBtn.innerHTML = '<span class="material-icons img-btn-zoom">search</span>';
+
+  // Add CSS class to new elements
+  bgLayer.className = "popup-bg";
+  imageContainer.className = "popup-container";
+  popUpImage.className = "popup-img";
 });
 
-function closeImg() {
-  document.querySelector(".img-window").remove();
-  document.querySelector(".img-btn-next").remove();
-  document.querySelector(".img-btn-prev").remove();
-}
+// Listen to click events on document and utilise event bubbling to select JS injected elements from other functions
+document.addEventListener("click", (e) => {
+  const targetClass = e.target.classList;
 
-function changeImg(change) {
-  document.querySelector("#current-img").remove();
+  if (targetClass.contains("img-btn-next")) {
+    changeImage("next");
+  } else if (targetClass.contains("img-btn-prev")) {
+    changeImage("prev");
+  } else if (targetClass.contains("img-btn-zoom")) {
+    zoomImage();
+  } else if (
+    targetClass.contains("img-btn-exit") ||
+    targetClass.contains("popup-bg")
+  ) {
+    closePopUp();
+  }
+});
 
-  let getImgWindow = document.querySelector(".img-window");
-  let newImg = document.createElement("img");
-  getImgWindow.appendChild(newImg);
+document.addEventListener("mousedown", (e) => {
+  if (e.target.classList.contains("zoom")) {
+    dragImage(e);
+  }
+});
 
-  let calcNewImg;
-  if (change === 1) {
-    calcNewImg = getLatestOpenedImg + 1;
-    if (calcNewImg > galleryImages.length) {
-      calcNewImg = 1;
+function dragImage(e) {
+  // Get pop-up image's container which has the absolute XY coordinates
+  const imageZoomed = document.querySelector(".popup-container");
+  const imageRect = imageZoomed.getBoundingClientRect();
+
+  // calculate offset
+  const shiftX = e.clientX - imageRect.left - imageZoomed.offsetWidth / 2;
+  const shiftY = e.clientY - imageRect.top - imageZoomed.offsetHeight / 2; // popup-container has top: 50%, hence the reset
+
+  // Referencing with imageRect does not work in the function below but somehow imageZoomed.getBoundingClientRect() does
+  function moveImage(e) {
+    // Set image's absolute position to cursor position
+    imageZoomed.style.top = e.clientY - shiftY + "px";
+    // Set constraints for image dragging vertically
+    if (imageZoomed.getBoundingClientRect().top >= 0) {
+      imageZoomed.style.top =
+        e.clientY - shiftY - imageZoomed.getBoundingClientRect().top + "px";
+    } else if (
+      imageZoomed.getBoundingClientRect().bottom <= window.innerHeight
+    ) {
+      imageZoomed.style.top =
+        e.clientY -
+        shiftY +
+        (window.innerHeight - imageZoomed.getBoundingClientRect().bottom) +
+        "px";
     }
-  } else if (change === 0) {
-    calcNewImg = getLatestOpenedImg - 1;
-    if (calcNewImg < 1) {
-      calcNewImg = galleryImages.length;
+    // Add constaints for dragging horizontally in smaller viewport
+    else if (window.innerWidth < 900) {
+      imageZoomed.style.left = e.clientX - shiftX + "px";
+      if (imageZoomed.getBoundingClientRect().left >= 0) {
+        imageZoomed.style.left =
+          e.clientX - shiftX - imageZoomed.getBoundingClientRect().left + "px";
+      } else if (
+        imageZoomed.getBoundingClientRect().right <= window.innerWidth
+      ) {
+        imageZoomed.style.left =
+          e.clientX -
+          shiftX +
+          (window.innerWidth - imageZoomed.getBoundingClientRect().right) +
+          "px";
+      }
     }
   }
 
-  newImg.setAttribute(
-    "src",
-    "img/portfolio/liuriver-actor-headshot-" + calcNewImg + ".jpg"
-  );
-  newImg.setAttribute("class", "popup-img");
-  newImg.setAttribute("id", "current-img");
+  document.addEventListener("mousemove", moveImage);
 
-  getLatestOpenedImg = calcNewImg;
+  // Remove the mousemove listener to stop image moving with cursor
+  imageZoomed.addEventListener("mouseup", () => {
+    document.removeEventListener("mousemove", moveImage);
+  });
+
+  // Disable HTML default dragging effect
+  imageZoomed.addEventListener("dragstart", (e) => {
+    e.preventDefault();
+  });
+}
+
+function zoomImage() {
+  document.querySelector(".popup-img").classList.toggle("zoom");
+  // Re-center the image container
+  document.querySelector(".popup-container").style.top = "50%";
+  document.querySelector(".popup-container").style.left = "50%";
+}
+
+function closePopUp() {
+  document.querySelector(".popup-bg").remove();
+}
+
+function changeImage(change) {
+  // Re-create pop-up image and its container
+  const newImage = document.createElement("img");
+  const newImageContainer = document.querySelector(".popup-container");
+
+  // Remove current pop-up image
+  document.querySelector(".popup-img").remove();
+  // Add new pop-up image to its new container
+  newImageContainer.appendChild(newImage);
+  // Re-center the new image container
+  newImageContainer.style.top = "50%";
+  newImageContainer.style.left = "50%";
+
+  // Set arguments for the change
+  let newImageIndex;
+  if (change === "next") {
+    newImageIndex = imageIndex + 1;
+    // when gallery reaches the end, set next image to the beginning
+    if (newImageIndex > galleryImages.length) {
+      newImageIndex = 1;
+    }
+  } else if (change === "prev") {
+    newImageIndex = imageIndex - 1;
+    // when gallery reaches the begnning, set prev image to the end
+    if (newImageIndex < 1) {
+      newImageIndex = galleryImages.length;
+    }
+  }
+
+  newImage.className = "popup-img";
+  newImage.setAttribute(
+    "src",
+    `img/portfolio/liuriver-actor-headshot-${newImageIndex}.jpg`
+  );
+
+  // Set index of the re-created pop-up image to match its file name
+  imageIndex = newImageIndex;
 }

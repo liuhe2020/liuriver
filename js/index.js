@@ -1,3 +1,5 @@
+"use strict";
+
 // Navbar
 const navTogglerBtn = document.querySelector(".toggler");
 const sidebar = document.querySelector(".sidebar");
