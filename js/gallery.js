@@ -59,52 +59,63 @@ document.addEventListener("click", (e) => {
 
 document.addEventListener("mousedown", (e) => {
   if (e.target.classList.contains("zoom")) {
-    dragImage(e);
+    triggerMove(e);
   }
 });
 document.addEventListener("touchstart", (e) => {
   if (e.target.classList.contains("zoom")) {
-    dragImage(e);
+    triggerMove(e);
   }
 });
 
-function dragImage(e) {
+function triggerMove(e) {
   // Get pop-up image's container which has the absolute XY coordinates
   const imageZoomed = document.querySelector(".popup-container");
-  const imageRect = imageZoomed.getBoundingClientRect();
 
   // calculate offset
-  const shiftX = e.clientX - imageRect.left - imageZoomed.offsetWidth / 2;
-  const shiftY = e.clientY - imageRect.top - imageZoomed.offsetHeight / 2; // popup-container has top: 50%, hence the reset
+  const shiftX =
+    e.clientX -
+    imageZoomed.getBoundingClientRect().left -
+    imageZoomed.offsetWidth / 2;
 
-  // Referencing with imageRect does not work in the function below but somehow imageZoomed.getBoundingClientRect() does
-  function moveImage(e) {
+  const shiftY =
+    e.clientY -
+    imageZoomed.getBoundingClientRect().top -
+    imageZoomed.offsetHeight / 2; // popup-container has top: 50%, hence the reset
+
+  function moving(e) {
+    // Get cursor & touch positions
+    const posX = e.clientX || e.touches[0].clientX;
+    const posY = e.clientY || e.touches[0].clientY;
+
     // Set image's absolute position to cursor position
-    imageZoomed.style.top = e.clientY - shiftY + "px";
+    imageZoomed.style.top = posY - shiftY + "px";
+
+    // Important! Cannot store getBoundingClientRect() in a variable, won't work in this case
     // Set constraints for image dragging vertically
     if (imageZoomed.getBoundingClientRect().top >= 0) {
       imageZoomed.style.top =
-        e.clientY - shiftY - imageZoomed.getBoundingClientRect().top + "px";
+        posY - shiftY - imageZoomed.getBoundingClientRect().top + "px";
     } else if (
       imageZoomed.getBoundingClientRect().bottom <= window.innerHeight
     ) {
       imageZoomed.style.top =
-        e.clientY -
+        posY -
         shiftY +
         (window.innerHeight - imageZoomed.getBoundingClientRect().bottom) +
         "px";
     }
     // Add constaints for dragging horizontally in smaller viewport
     else if (window.innerWidth < 900) {
-      imageZoomed.style.left = e.clientX - shiftX + "px";
+      imageZoomed.style.left = posX - shiftX + "px";
       if (imageZoomed.getBoundingClientRect().left >= 0) {
         imageZoomed.style.left =
-          e.clientX - shiftX - imageZoomed.getBoundingClientRect().left + "px";
+          posX - shiftX - imageZoomed.getBoundingClientRect().left + "px";
       } else if (
         imageZoomed.getBoundingClientRect().right <= window.innerWidth
       ) {
         imageZoomed.style.left =
-          e.clientX -
+          posX -
           shiftX +
           (window.innerWidth - imageZoomed.getBoundingClientRect().right) +
           "px";
@@ -112,19 +123,19 @@ function dragImage(e) {
     }
   }
 
-  document.addEventListener("mousemove", moveImage);
-  document.addEventListener("touchmove", moveImage);
+  document.addEventListener("mousemove", moving);
+  document.addEventListener("touchmove", moving);
 
   // Remove the mousemove listener to stop image moving with cursor
-  imageZoomed.addEventListener("mouseup", () => {
-    document.removeEventListener("mousemove", moveImage);
+  document.addEventListener("mouseup", () => {
+    document.removeEventListener("mousemove", moving);
   });
-  imageZoomed.addEventListener("touchend", () => {
-    document.removeEventListener("touchend", moveImage);
+  document.addEventListener("touchend", () => {
+    document.removeEventListener("touchmove", moving);
   });
 
   // Disable HTML default dragging effect
-  imageZoomed.addEventListener("dragstart", (e) => {
+  document.addEventListener("dragstart", (e) => {
     e.preventDefault();
   });
 }
