@@ -62,90 +62,85 @@ galleryContainer.addEventListener("click", (e) => {
 
     imageContainer.addEventListener("mousedown", (e) => {
       if (e.target.classList.contains("zoom")) {
-        triggerMove(e);
+        triggerMove(e, imageContainer);
       }
     });
-    popUpImage.addEventListener("touchstart", (e) => {
+    imageContainer.addEventListener("touchstart", (e) => {
       if (e.target.classList.contains("zoom")) {
-        triggerMove(e);
+        triggerMove(e, imageContainer);
       }
     });
-
-    function triggerMove(e) {
-      // calculate offset for both cursor and touch
-      const shiftX =
-        (e.clientX || e.touches[0].clientX) -
-        imageContainer.getBoundingClientRect().left -
-        imageContainer.offsetWidth / 2;
-
-      const shiftY =
-        (e.clientY || e.touches[0].clientY) -
-        imageContainer.getBoundingClientRect().top -
-        imageContainer.offsetHeight / 2; // popup-container has top: 50%, hence the reset
-
-      function moving(e) {
-        // Get cursor & touch positions
-        const posX = e.clientX || e.touches[0].clientX;
-        const posY = e.clientY || e.touches[0].clientY;
-
-        // Set image's absolute position to cursor position
-        imageContainer.style.top = posY - shiftY + "px";
-
-        // Important! Cannot store getBoundingClientRect() in a variable, won't work in this case
-        // Set constraints for image dragging vertically
-        if (imageContainer.getBoundingClientRect().top >= 0) {
-          imageContainer.style.top =
-            posY - shiftY - imageContainer.getBoundingClientRect().top + "px";
-        } else if (
-          imageContainer.getBoundingClientRect().bottom <= window.innerHeight
-        ) {
-          imageContainer.style.top =
-            posY -
-            shiftY +
-            (window.innerHeight -
-              imageContainer.getBoundingClientRect().bottom) +
-            "px";
-        }
-        // Add constaints for dragging horizontally in smaller viewport
-        else if (window.innerWidth < 900) {
-          imageContainer.style.left = posX - shiftX + "px";
-          if (imageContainer.getBoundingClientRect().left >= 0) {
-            imageContainer.style.left =
-              posX -
-              shiftX -
-              imageContainer.getBoundingClientRect().left +
-              "px";
-          } else if (
-            imageContainer.getBoundingClientRect().right <= window.innerWidth
-          ) {
-            imageContainer.style.left =
-              posX -
-              shiftX +
-              (window.innerWidth -
-                imageContainer.getBoundingClientRect().right) +
-              "px";
-          }
-        }
-      }
-
-      imageContainer.addEventListener("mousemove", moving);
-      imageContainer.addEventListener("touchmove", moving);
-
-      // Remove the mousemove listener to stop image moving with cursor
-      imageContainer.addEventListener("mouseup", () => {
-        imageContainer.removeEventListener("mousemove", moving);
-      });
-      imageContainer.addEventListener("touchend", () => {
-        imageContainer.removeEventListener("touchmove", moving);
-      });
-
-      // Disable HTML default dragging effect
-      imageContainer.addEventListener("dragstart", (e) => {
-        e.preventDefault();
-      });
-    }
   }
 });
+
+function triggerMove(e, imageContainer) {
+  // calculate offset for both cursor and touch
+  const shiftX =
+    (e.clientX || e.touches[0].clientX) -
+    imageContainer.getBoundingClientRect().left -
+    imageContainer.offsetWidth / 2;
+
+  const shiftY =
+    (e.clientY || e.touches[0].clientY) -
+    imageContainer.getBoundingClientRect().top -
+    imageContainer.offsetHeight / 2; // popup-container has top: 50%, hence the reset
+
+  function moving(e) {
+    // Get cursor & touch positions
+    const posX = e.clientX || e.touches[0].clientX;
+    const posY = e.clientY || e.touches[0].clientY;
+
+    // Set image's absolute position to cursor position
+    imageContainer.style.top = posY - shiftY + "px";
+
+    // Important! Cannot store getBoundingClientRect() in a variable, won't work in this case
+    // Set constraints for image dragging vertically
+    if (imageContainer.getBoundingClientRect().top >= 0) {
+      imageContainer.style.top =
+        posY - shiftY - imageContainer.getBoundingClientRect().top + "px";
+    } else if (
+      imageContainer.getBoundingClientRect().bottom <= window.innerHeight
+    ) {
+      imageContainer.style.top =
+        posY -
+        shiftY +
+        (window.innerHeight - imageContainer.getBoundingClientRect().bottom) +
+        "px";
+    }
+    // Add constaints for dragging horizontally in smaller viewport
+    else if (window.innerWidth < 900) {
+      imageContainer.style.left = posX - shiftX + "px";
+      if (imageContainer.getBoundingClientRect().left >= 0) {
+        imageContainer.style.left =
+          posX - shiftX - imageContainer.getBoundingClientRect().left + "px";
+      } else if (
+        imageContainer.getBoundingClientRect().right <= window.innerWidth
+      ) {
+        imageContainer.style.left =
+          posX -
+          shiftX +
+          (window.innerWidth - imageContainer.getBoundingClientRect().right) +
+          "px";
+      }
+    }
+  }
+
+  imageContainer.addEventListener("mousemove", moving);
+  imageContainer.addEventListener("touchmove", moving);
+
+  // Remove the mousemove listener to stop image moving with cursor
+  imageContainer.addEventListener("mouseup", () => {
+    imageContainer.removeEventListener("mousemove", moving);
+  });
+  imageContainer.addEventListener("touchend", () => {
+    imageContainer.removeEventListener("touchmove", moving);
+  });
+
+  // Disable HTML default dragging effect
+  imageContainer.addEventListener("dragstart", (e) => {
+    e.preventDefault();
+  });
+}
 
 function zoomImage(imageContainer) {
   imageContainer.firstChild.classList.toggle("zoom");
