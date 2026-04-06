@@ -207,6 +207,7 @@ body {
   flex: 45%;
   max-width: 45%;
   overflow: hidden;
+  max-heigth: calc(100vh - 60px);
 }
 
 .home-slide .placeholder img {
